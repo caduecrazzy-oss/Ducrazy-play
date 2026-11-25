@@ -1,0 +1,29 @@
+name: Build PWA APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pegar os arquivos do projeto
+        uses: actions/checkout@v4
+
+      - name: Gerar APK com PWABuilder
+        id: pwa
+        uses: pwa-builder/actions/build@v1
+        with:
+          app_id: 'ducrazy-play'
+          app_name: 'DuCrazy Play'
+          package_id: 'com.ducrazy.play'
+          version_name: '1.0.0'
+          version_code: '1'
+
+      - name: Salvar o APK pronto
+        uses: actions/upload-artifact@v4
+        with:
+          name: DuCrazy-Play-APK
+          path: ${{ steps.pwa.outputs.android-apk-path }}
